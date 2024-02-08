@@ -2,6 +2,7 @@ package com.epicode.U5D2;
 
 import com.epicode.U5D2.Service.DrinkService;
 import com.epicode.U5D2.Service.PizzaService;
+import com.epicode.U5D2.Service.ToppingService;
 import com.epicode.U5D2.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +16,7 @@ public class OrdersRunner implements CommandLineRunner {
 	@Autowired
 	private PizzaService pizzaService;
 	@Autowired
-	private Topping toppingService;
+	private ToppingService toppingService;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -36,6 +37,13 @@ public class OrdersRunner implements CommandLineRunner {
 			o1.addItem(ctx.getBean("lemonade", Drink.class));
 			o1.addItem(ctx.getBean("wine", Drink.class));
 
+			////////SALVATAGGIO NEL DB//////
+			toppingService.saveTopping((Topping) ctx.getBean("toppings_salami"));
+			toppingService.saveTopping((Topping) ctx.getBean("toppings_tomato"));
+			toppingService.saveTopping((Topping) ctx.getBean("toppings_cheese"));
+			pizzaService.savePizza((Pizza) ctx.getBean("pizza_margherita"));
+			drinkService.saveDrink((Drink) ctx.getBean("lemonade"));
+
 			System.out.println("DETTAGLI TAVOLO 1:");
 			o1.print();
 
@@ -47,9 +55,7 @@ public class OrdersRunner implements CommandLineRunner {
 			ctx.close();
 		}
 
-		////////SALVATAGGIO NEL DB//////
 
-		pizzaService.savePizza((Pizza) ctx.getBean("pizza_margherita"));
 
 
 
